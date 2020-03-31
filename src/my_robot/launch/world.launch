@@ -1,6 +1,10 @@
 <launch>
     <!-- World file -->
-    <arg name="world_file" default="$(find my_robot)/worlds/my_world.world" />
+    <arg name="new_world" default='false' />
+    <arg name="my_world" default='true' />
+
+    <arg name="world_file" default="$(find my_robot)/worlds/my_world.world" unless="$(arg my_world)" />
+    <arg name="world_file" default="$(find my_robot)/worlds/myWorld.world" unless="$(arg new_world)" />
 
     <!-- Launch Gazebo World -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch" >
