@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <robot name="my_robot" xmlns:xacro="https://www.ros.org/wiki/xacro" >
+<xacro:include filename="$(find my_robot)/urdf/my_robot.gazebo" />
 
     <gazebo reference="left_wheel">
         <material>Gazebo/Green</material>
@@ -14,7 +15,7 @@
     <gazebo reference="camera">
         <material>Gazebo/Red</material>
     </gazebo>
-    
+
         <link name="robot_footprint"></link>
         <joint name="robot_footprint" type="fixed">
             <origin xyz="0 0 0" rpy="0 0 0" />
