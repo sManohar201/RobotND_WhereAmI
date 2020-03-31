@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <robot name="my_robot" xmlns:xacro="https://www.ros.org/wiki/xacro" >
+
+    <gazebo reference="left_wheel">
+        <material>Gazebo/Green</material>
+    </gazebo>
+    <gazebo reference="right_wheel">
+        <material>Gazebo/Green</material>
+    </gazebo>
+    <gazebo reference="chassis">
+        <material>Gazebo/Blue</material>
+    </gazebo>
+    <gazebo reference="camera">
+        <material>Gazebo/Red</material>
+    </gazebo>
+    
         <link name="robot_footprint"></link>
         <joint name="robot_footprint" type="fixed">
             <origin xyz="0 0 0" rpy="0 0 0" />
@@ -159,6 +173,37 @@
             <child link="camera"/>
             <parent link="chassis" />
             <axis xyz=" 0 1 0 " rpy="0 0 0" />
+        </joint>
+
+        <link name="hokuyo">
+            <visual name="hokuyo_visual">
+                <geometry>
+                    <mesh filename="package://my_robot/meshes/hokuyo.dae" />
+                </geometry>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+            </visual>
+            <collision name="camera_collision">
+                <geometry>
+                    <box size="0.1 0.1 0.1"/>
+                </geometry>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+            </collision>
+            <inertial>
+                <mass value="1e-5"/>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+                <inertia
+                ixx="1e-6" ixy="0" ixz="0"
+                iyy="1e-6" iyz="0"
+                izz="1e-6"
+                /> 
+            </inertial>
+        </link>
+
+        <joint type="fixed" name="hokuyo_joint">
+            <origin xyz="0.15 0 0.1" rpy="0 0 0" />
+            <parent link="chassis" />
+            <child link="hokuyo" />
+            <axis xyz="0 1 0" rpy="0 0 0" />
         </joint>
 
 </robot>
