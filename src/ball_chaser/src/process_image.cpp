@@ -20,7 +20,7 @@ class ImageProcessor {
         // service client caller function.
         void DriveBot(float linear_x, float angular_z);
         // identify where the ball is in the image
-        std::pair FindRegion(const sensor_msgs::Image::ConstPtr &img, int pixel_index);
+        std::pair<float, float> FindRegion(int rows, int height, int pixel_index);
 }
 
 ImageProcessor::ImageProcessor() {
@@ -45,17 +45,40 @@ void ImageProcessor::ProcessImageCallback(const sensor_msgs::Image::ConstPtr &im
     }
 
     if (ball_displaced_) {
-       std::pair<float, float> result = ImageProcessor::FindRegion(img, pixel_index); 
+       std::pair<float, float> result = ImageProcessor::FindRegion(img->step, img->height, pixel_index); 
+       ImageProcessor::DriveBot(result.first, result.second);
+    } else {  // if no ball found stop the robot.
+        ImageProcessor::DriveBot(0, 0);
     }
+    
 
 }
 
-std::pair ImageProcessor::FindRegion(const sensor_msgs::Image::ConstPtr &img, int pixel_index) {
-    
+std::pair<float, float> ImageProcessor::FindRegion(int column, int row, int pixel_index) {
+    float row_pos = float((pixel_index - (pixel_index/row)*row))/float(column);
+    // if the ball is in the left portion of the robot move left
+    if (row_pos <= 0.36) {
+        return std::make_pair(0.1,0.1); 
+    //  if the ball is in the center go straight
+    } else if ((row_pos>0.36)&&(row_pos<0.65) {
+        return std::make_pair(0.1, 0.0);
+    // if the ball is in the right region move and rotate right
+    } else if (row_pos >= 0.65)
+        return std::make_pair(0.1, -0.1); 
+    }
 }
 
 void ImageProcessor::DriveBot(float linear_x, float angular_z) {
+    ROS_INFO_STREAM("Robot chassing the ball");
+    ball_chaser::DriveToTarget srv;
+    // set the request values to linear and angular argument values
+    srv.request.linear_x = linear_x;
+    srv.request.angular_z = angular_z;
 
+    // call the service /drive_robot/command
+    if(!this->client_.call(srv)) {
+        ROS_ERROR("Failed to call the service");
+    }
 }
 
 int main(int argc, char ** argv) {
