@@ -150,7 +150,7 @@ add_dependencies(${PROJECT_NAME}_image_pro ${${PROJECT_NAME}_EXPORTED_TARGETS} $
 target_link_libraries(${PROJECT_NAME}_drive
   ${catkin_LIBRARIES}
 )
-target_link_libraries(${PROJECT_NAME}_imgae_pro
+target_link_libraries(${PROJECT_NAME}_image_pro
   ${catkin_LIBRARIES}
 )
 
