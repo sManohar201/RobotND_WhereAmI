@@ -32,7 +32,7 @@ DriveBot::DriveBot(int rate) : r_(rate)
 }
 
 bool DriveBot::callBack(ball_chaser::DriveToTarget::Request &req, ball_chaser::DriveToTarget::Response &res) {
-    ROS_INFO("Go to Position request - Linear x: %1.f, Angular z: %1.2f", (float)req.linear_x, (float)req.angular_z);
+    ROS_INFO("Go to Position request - Linear x: %1.2f, Angular z: %1.2f", (float)req.linear_x, (float)req.angular_z);
     geometry_msgs::Twist motor_command;
     motor_command.linear.x = req.linear_x;
     motor_command.angular.z = req.angular_z;
