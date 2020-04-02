@@ -1,6 +1,9 @@
 #include "ros/ros.h"
 #include <tuple>
-#include "ball_cahser/DriveToTarget.h"
+
+#include "sensor_msgs/Image.h"
+
+#include "ball_chaser/DriveToTarget.h"
 
 class ImageProcessor {
     private:
@@ -21,7 +24,7 @@ class ImageProcessor {
         void DriveBot(float linear_x, float angular_z);
         // identify where the ball is in the image
         std::pair<float, float> FindRegion(int rows, int height, int pixel_index);
-}
+};
 
 ImageProcessor::ImageProcessor() {
     // create client object using the node handle
@@ -60,10 +63,10 @@ std::pair<float, float> ImageProcessor::FindRegion(int column, int row, int pixe
     if (row_pos <= 0.36) {
         return std::make_pair(0.1,0.1); 
     //  if the ball is in the center go straight
-    } else if ((row_pos>0.36)&&(row_pos<0.65) {
+    } else if ((row_pos>0.36)&&(row_pos<0.65)) {
         return std::make_pair(0.1, 0.0);
     // if the ball is in the right region move and rotate right
-    } else if (row_pos >= 0.65)
+    } else if (row_pos >= 0.65) {
         return std::make_pair(0.1, -0.1); 
     }
 }
