@@ -13,8 +13,8 @@ class ImageProcessor {
         ros::ServiceClient client_;
         // define subscriber object
         ros::Subscriber sub_;
-        bool ball_displaced_;
-        
+        int pixel_index_column_;
+
     public:
         ImageProcessor();
         ~ImageProcessor() {};
@@ -23,7 +23,7 @@ class ImageProcessor {
         // service client caller function.
         void DriveBot(float linear_x, float angular_z);
         // identify where the ball is in the image
-        std::pair<float, float> FindRegion(int rows, int height, int pixel_index);
+        void FindRegion(int);
 };
 
 ImageProcessor::ImageProcessor() {
@@ -32,43 +32,63 @@ ImageProcessor::ImageProcessor() {
     // create subscriber object which borrows image data
     sub_ = n_.subscribe("/camera/rgb/image_raw", 10, &ImageProcessor::ProcessImageCallback, this);
     // initialize ball_displaced to false
-    ball_displaced_ = false;
 }
 
 void ImageProcessor::ProcessImageCallback(const sensor_msgs::Image::ConstPtr &img) {
     int white_pixel = 255;
-    int pixel_index;
     // loop through each image and find if the robot sees a ball
-    for (int i=0; i<img->height*img->step; i++) {
-        if (img->data[i] == white_pixel) {
-            ball_displaced_ = true;
-            pixel_index = i;
-            break;
-        }
-    }
+     int row = 0;
+    int step = 0;
+    int i = 0;
 
-    if (ball_displaced_) {
-       std::pair<float, float> result = ImageProcessor::FindRegion(img->step, img->height, pixel_index); 
-       ImageProcessor::DriveBot(result.first, result.second);
+    bool ball_displaced = false;
+    //ROS_INFO("height: %d, width: %d, step: %d", img.height, img.width, img.step);
+    //ROS_INFO("HEIGHT: %f, STEP: %f", img.height, img.step);
+    for (row = 0; row < img->height && ball_displaced == false; row++)
+    {
+        for (step = 0; step < img->step && ball_displaced == false; ++step)
+        {   
+            i = (row*img->step)+step;
+            //ROS_INFO("row: %d, step: %d, i: %d", row, step, i);
+            if (img->data[i] == white_pixel)
+            {   
+                ball_displaced = true;
+                //ROS_INFO("row: %d, step: %d, i: %d", row, step, i);
+                pixel_index_column_ = step;
+            }
+		}
+    }
+   
+       if (ball_displaced) {
+        ImageProcessor::FindRegion(img->width); 
     } else {  // if no ball found stop the robot.
         ImageProcessor::DriveBot(0, 0);
     }
-    
-
 }
 
-std::pair<float, float> ImageProcessor::FindRegion(int column, int row, int pixel_index) {
-    float row_pos = float((pixel_index - (pixel_index/row)*row))/float(column);
+void ImageProcessor::FindRegion(int width) {
+
+    int row_pos = pixel_index_column_/3;
+    int whole_Img = width/3; 
+    ROS_INFO("Who : %d , pos : %d", whole_Img, row_pos);
+    float linear, angular;
     // if the ball is in the left portion of the robot move left
-    if (row_pos <= 0.36) {
-        return std::make_pair(0.1,0.1); 
+    if (row_pos <= whole_Img) {
+        linear = 0.1;
+        angular = 0.05;
+        ROS_INFO_STREAM("Ball in left portion");
     //  if the ball is in the center go straight
-    } else if ((row_pos>0.36)&&(row_pos<0.65)) {
-        return std::make_pair(0.1, 0.0);
+    } else if ((row_pos>whole_Img)&&(row_pos<2*whole_Img)) {
+        linear = 0.1;
+        angular = 0; 
+        ROS_INFO_STREAM("Ball in the middle portion");
     // if the ball is in the right region move and rotate right
-    } else if (row_pos >= 0.65) {
-        return std::make_pair(0.1, -0.1); 
+    } else if (row_pos >= 2*whole_Img) {
+        linear = 0.1; 
+        angular = -0.05;
+        ROS_INFO_STREAM("Ball in the right portion");
     }
+    ImageProcessor::DriveBot(linear, angular);
 }
 
 void ImageProcessor::DriveBot(float linear_x, float angular_z) {
