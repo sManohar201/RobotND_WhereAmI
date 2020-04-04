@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <robot name="vivaRob" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:include filename="$(find my_robot)/urdf/my_robot.gazebo" />
+
     <!-- define all the parameters for the robot -->
     <xacro:property name="bodylen" value="0.5" />
     <xacro:property name="width" value="0.25" />
