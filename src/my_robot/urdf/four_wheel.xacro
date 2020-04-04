@@ -1,5 +1,34 @@
-<?xml version="1.0" ?>
-<robot name="fourWheelRobot">
+<?xml version="1.0" encoding="UTF-8"?>
+<robot name="fourWheelRobot" xmlns:xacro="https://www.ros.org/wiki/xacro">
+ 
+  <xacro:include filename="$(find my_robot)/urdf/my_robot.gazebo" />
+
+  <link name="footprint">
+  </link>
+  <link name="fourWheelRobot__link_0">
+    <inertial>
+      <mass value="0.144047"/>
+      <origin rpy="0  0  0" xyz="0  0  0"/>
+      <inertia ixx="0.00696042" ixy="0" ixz="0" iyy="0.0124639" iyz="0" izz="0.0185044"/>
+    </inertial>
+    <collision name="fourWheelRobot__collision">
+      <origin rpy="0  0  0" xyz="0  0  0"/>
+      <geometry>
+        <box size="1 0.735885 0.195744"/>
+      </geometry>
+    </collision>
+    <visual name="fourWheelRobot__visual">
+      <origin rpy="0  0  0" xyz="0  0  0"/>
+      <geometry>
+        <box size="1 0.735885 0.195744"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="footprintFixed" type="fixed">
+      <origin rpy="0  0  0" xyz="0  0  0"/>
+      <parent link="footprint" />
+      <child link="fourWheelRobot_link_0" />
+  </joint>
   <joint name="fourWheelRobot__link_0_JOINT_1" type="continuous">
     <parent link="fourWheelRobot__link_0"/>
     <child link="fourWheelRobot__link_1"/>
