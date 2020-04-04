@@ -14,18 +14,25 @@
     <material name="light_grey"><color rgba="0.4 0.4 0.4 1.0"></color></material>
     <material name="yellow"><color rgba="0.8 0.8 0.0 1.0"></color></material>
     <material name="black"><color rgba="0.15 0.15 0.15 1.0"></color></material>
-    <!-- <gazebo reference="left_wheel">
-        <material>Gazebo/Green</material>
+    <gazebo reference="front_left_wheel_link">
+        <material>Gazebo/Black</material>
     </gazebo>
-    <gazebo reference="right_wheel">
-        <material>Gazebo/Green</material>
+    <gazebo reference="front_right_wheel_link">
+        <material>Gazebo/Black</material>
+    </gazebo>
+    <gazebo reference="rear_left_wheel_link">
+        <material>Gazebo/Black</material>
+    </gazebo>
+    <gazebo reference="rear_right_wheel_link">
+        <material>Gazebo/Black</material>
     </gazebo>
     <gazebo reference="chassis">
-        <material>Gazebo/Blue</material>
+        <material>Gazebo/Yellow</material>
     </gazebo>
     <gazebo reference="camera">
-        <material>Gazebo/Red</material>
-    </gazebo> -->
+        <material>Gazebo/Grey</material>
+    </gazebo>
+
     <!-- define macros for the robot -->
     <xacro:property  name="origin0">
         <origin xyz=" 0 0 0 " rpy=" 0 0 0"/>
@@ -40,12 +47,12 @@
     <link name="base_link"></link>
     <joint name="base_link_joint" type="fixed">
         <parent link="base_link" />
+        <origin xyz="0 0 0" rpy="0 0 0 " />
         <child link="chassis" />
-        <origin xyz="0 0 0" rpy="0 0 0" />
     </joint>
-    <!-- robot chassis link -->
+   <!-- robot chassis link -->
     <link name="chassis">
-        <!-- <pose>0 0 0.5 0 0 1.5708</pose> -->
+        <pose>0 0 0.5 0 0 0</pose>
         <visual name="chassis_visual">
             <xacro:insert_block name="origin0" />
             <xacro:insert_block name="box_geometry"  />
@@ -105,16 +112,16 @@
     </xacro:macro>
 
     <!-- insert four wheels -->
-    <xacro:wheel prefix="front_left">
+    <xacro:wheel prefix="left_front">
        <origin xyz="0.2 -0.18 0" rpy="0 0 0" />
     </xacro:wheel>
-    <xacro:wheel prefix="front_right">
+    <xacro:wheel prefix="right_front">
        <origin xyz="0.2 0.18 0" rpy="0 0 0" />
     </xacro:wheel>
-    <xacro:wheel prefix="rear_left">
+    <xacro:wheel prefix="left_back">
        <origin xyz="-0.2 -0.18 0" rpy="0 0 0" />
     </xacro:wheel>
-    <xacro:wheel prefix="rear_right">
+    <xacro:wheel prefix="right_back">
        <origin xyz="-0.2 0.18 0" rpy="0 0 0" />
     </xacro:wheel>
 
