@@ -4,16 +4,16 @@
 <xacro:include filename="$(find my_robot)/urdf/my_robot.gazebo" />
 
     <gazebo reference="left_wheel">
-        <material>Gazebo/Green</material>
+        <material>Gazebo/Black</material>
     </gazebo>
     <gazebo reference="right_wheel">
-        <material>Gazebo/Green</material>
+        <material>Gazebo/Black</material>
     </gazebo>
     <gazebo reference="chassis">
-        <material>Gazebo/Blue</material>
+        <material>Gazebo/Yellow</material>
     </gazebo>
     <gazebo reference="camera">
-        <material>Gazebo/Red</material>
+        <material>Gazebo/Grey</material>
     </gazebo>
 
         <link name="robot_footprint"></link>
