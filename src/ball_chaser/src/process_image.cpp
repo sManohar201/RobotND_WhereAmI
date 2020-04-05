@@ -46,16 +46,17 @@ void ImageProcessor::ProcessImageCallback(const sensor_msgs::Image::ConstPtr &im
     //ROS_INFO("HEIGHT: %f, STEP: %f", img.height, img.step);
     for (row = 0; row < img->height && ball_displaced == false; row++)
     {
-        for (step = 0; step < img->step && ball_displaced == false; ++step)
+        for (step = 0; step < (img->step-2) && ball_displaced == false; )
         {   
             i = (row*img->step)+step;
             //ROS_INFO("row: %d, step: %d, i: %d", row, step, i);
-            if (img->data[i] == white_pixel)
+            if ((img->data[i] == white_pixel)&&(img->data[i+1] == white_pixel)&&(img->data[i+2] == white_pixel))
             {   
                 ball_displaced = true;
                 //ROS_INFO("row: %d, step: %d, i: %d", row, step, i);
                 pixel_index_column_ = step;
             }
+            step = step+3;
 		}
     }
    
