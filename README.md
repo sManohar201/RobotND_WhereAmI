@@ -1,5 +1,5 @@
 # RoboND-ball_follower
-A simple robot that follows a ball. 
+A short experimentation on how to use ROS Adaptive Monte Carlo Localization package.  
 
 ## For development execute the following commands
 1. `git clone git@github.com:sManohar201/RoboND-ball_follower.git'
